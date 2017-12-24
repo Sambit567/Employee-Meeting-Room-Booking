@@ -1,0 +1,79 @@
+<div class="container">
+
+  <div *ngFor="let room of rooms" class="card">
+    <div class="card-image waves-effect waves-block waves-light">
+      <img class="activator" src="http://72.29.85.225/~admarqui/wp-content/uploads/2014/05/sala-de-juntas-adm1.jpg">
+    </div>
+    <div class="card-content">
+      <span class="card-title activator grey-text text-darken-4">{{room.name}}<i class="material-icons right">more_vert</i></span>
+    </div>
+    <div class="card-reveal">
+      <div class="card-title grey-text text-darken-4">Reserve {{room.name}}<i class="material-icons right">close</i></div>
+        <div *ngFor="let booking of (room.bookings)" class="card hoverable">
+          <div class="card-content">
+            <div class="row">
+              <div class="col m9">
+               <p class="card-title">{{booking.state}}</p>
+                <p> {{booking.state}} from {{booking.start | date}} to {{booking.start | date:'shortTime'}}
+                at {{booking.end | date:'shortTime'}}</p>
+              </div>
+              <div class="col m3">
+                <a class="waves-effect waves-light btn grey darken-3" (click)="setConfirm((booking), (room))">Are U Sure?</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="card-action">
+        <form [formGroup]="bookingForm" (ngSubmit) = "createBooking((room))" novalidate>
+          <div class="row">
+            <div class="col m4">
+              <label for="datemeeting">Booking Date</label>
+              <input id="datemeeting" formControlName="datemeeting" type="text" materialize="pickadate" class="datepicker"
+                     [materializeParams]="[{format: 'yyyy-mm-dd'}]">
+            </div>
+            <div class="col m4">
+              <label for="fromtime">Starting Time</label>
+              <input id="fromtime" formControlName="fromtime" type="text" materialize="pickatime" class="datepicker"
+                     [materializeParams]="[{twelvehour: false}]">
+            </div>
+            <div class="col m4">
+              <label for="totime">Ending of Appoinment</label>
+              <input id="totime" formControlName="totime" type="text" materialize="pickatime" class="datepicker"
+                     [materializeParams]="[{twelvehour: false}]">
+            </div>
+            <div >
+              <button type="submit" [disabled]="!bookingForm.valid" class="waves-effect waves-light btn grey darken-3">Reserve</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div id="modal2" class="modal bottom-sheet" materialize="modal" [materializeParams]="[{dismissible: false}]" [materializeActions]="modalActions2">
+    <div class="modal-content">
+      <form [formGroup]="roomForm" (ngSubmit) = "createRoom()" novalidate>
+        <div class="row">
+          <div class="col m12">
+            <label for="name">Room Name</label>
+            <input id="name" formControlName="name" type="text">
+          </div>
+          <div class="col m12">
+            <label for="capacity">Capacity</label>
+            <input id="capacity" formControlName="capacity" type="number">
+          </div>
+          <div >
+            <button type="submit" [disabled]="!roomForm.valid" class="waves-effect waves-light btn grey darken-3">Create Room</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <a class="waves-effect waves-green btn-flat" (click)="closeModal2()">Close</a>
+    </div>
+  </div>
+  <div class="fixed-action-btn horizontal">
+    <a class="btn-floating btn-large grey darken-3 waves-effect waves-light" (click)="openModal2()" data-position="left" data-tooltip="createroom" materialize="tooltip">
+      <i class="large material-icons">add</i>
+    </a>
+  </div>
+</div>
